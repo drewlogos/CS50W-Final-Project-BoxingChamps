@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+{% if message %}
+    {{ message }}
+{% endif %}
+<div class="container"> 
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <img src="{% static 'bcmain/index1.jpg' %}" class="card-img-top" alt="Index Boxer"></img>
+                    <div class="card-header">
+                        <h5 class="card-title mt-1" style="width: 50%;">About Boxing Champions:</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Boxing Champions is a web-based and text-interactive game set in Glovegate City, a fictional place renowned for its deep-rooted connection to the world of boxing and its high-stakes tournaments. Nestled in a picturesque valley with towering skyscrapers and sprawling arenas, Glovegate stands as a beacon for fighters and fans alike.</p>
+                        <p>Text-based games are addictive and great fun to play. Boxing Champions is no exception! New players start off weak and poor and the murky underworld of Glovegate City shows no mercy. As an online web-browser RPG game, the rules are simple: Build a new life, get to the top and avoid being knocked out. You can choose any route to get there; from hard work and training to stat boosts with chemical products and doping. And you will, of course, assume the consequences of your actions.</p>    
+                        <p>With the most advanced personal computers and consoles these days, games with cutting edge graphics and technologies overcomes where everything started. The true essence of a game is in its gameplay and the way in which it involves players. Although browser games may be in decline, there's still a core audience that loves this kind. Online games are even better when it comes to playing within a browser, as the whole game is geared towards the casual player. This is what has made them so popular and the reason why this browser game is also appealing; because it's the type of game you can play at a pace that suits you. It's the type of game you can spend hours on or it's the type of game you can sneak onto whilst at work or to take a break.</p>
+                        <p>Boxing Champions encompasses the depth and scale of a RPG genre with the ease-of-play of the simplest browser games. Nowadays you can play anywhere, any time and enjoy this browser game in all its glory.</p>       
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mt-1" style="width: 50%;">How to play:</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">You, as a proud citizen of Glovegate have a dream to become the greatest champion of all time. You will need to build your character to infinite strengths, train at the gym or use shady strategies to challenge and beat the greatest champions at the Arena. </p>
+                        <p> You can carve out a successful path from Mr. Nobody to a top contender in the electrifying world of Glovegate City's boxing scene. You will need to earn money to pay gyms and tournament fees and increase your status. You'll most likely need to get your hands dirty and fight in the underground. The stronger you are the more battles you'll win so prepare to train hard to become the best. It is a long but exciting journey and once you step up, the spotlight is on you.</p>
+                        <a href="register" class="btn btn-secondary"> Join Now </a>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

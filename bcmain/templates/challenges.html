@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center"> 
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Image of the Place -->
+                <img src="{% static 'bcmain/challenges.png' %}" class="card-img-top" alt="challenges"></img>
+                <div class="card-body">
+                    <div class="row my-2">
+                        <strong class="card-title text-justify mb-1"> The arena pulses with electric energy as the lights dim, and the roaring crowd crescendos in anticipation. Spotlights cut through the haze, illuminating the ring where two warriors stand, their eyes locked in an unspoken promise of war. Neon banners flash names across the jumbotron, the faces of warriors soon to collide staring down from massive screens. Then, as the announcer steps forward, microphone in hand, the crowd erupts—because they know the moment of reckoning is near. </strong>
+                    </div>
+                </div>
+            </div>
+            <div>
+              <table class="table table-hover" id="challenges">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="text-center">Rank</th>
+                      <th scope="col" class="text-center">Name</th>
+                      <th scope="col" class="text-center">Nickname</th>
+                      <th scope="col" class="text-center">Reputation</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <!-- Generate list of rivals (loop) -->
+                      {% for npc in nonplayer %}
+                          <tr>
+                              <th scope="row" class="align-middle text-center"> {{ npc.rank_hof }} </th>
+                              <td class="align-middle text-center"> {{ npc.name }} </td>
+                              <td class="align-middle text-center"> {{ npc.nickname }} </td>
+                              <td class="align-middle text-justify"> {{ npc.reputation }} </td>
+                              <!-- Mark "complete" the defeated rivals -->
+                              {% if player.rank_hof <= npc.rank_hof %}
+                              <td class="align-middle"> <button type="button" class="btn btn-success" id="npc{{npc.rank_hof}}" name={{ npc.rank_hof }} disabled> Completed </button></td>
+                              <!-- Lock Challenge buttons for higher rivals -->
+                              {% elif npc.rank_hof <= rivals_locked %}
+                              <td class="align-middle"> <button type="button" data-bs-toggle="modal" data-bs-target="#challengeConfirm" class="btn btn-secondary challenge" id="npc{{npc.rank_hof}}" name={{ npc.rank_hof }} disabled> Locked </button></td>
+                              <!-- Enable Challenge button for next rival -->
+                              {% elif npc.rank_hof > rivals_locked %}
+                              <td class="align-middle"> <button type="button" data-bs-toggle="modal" data-bs-target="#challengeConfirm" class="btn btn-outline-secondary challenge" id="npc{{npc.rank_hof}}" name={{ npc.rank_hof }}> Challenge </button> </td>
+                              {% endif %}
+                          </tr>
+                      {% endfor %}
+                      <!-- Modal 1 Challenge-->
+                      <div class="modal fade" id="challengeConfirm" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="challengeConfirmLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                              <div class="modal-header">
+                                  <h5 class="modal-title" id="challengeConfirmLabel"><strong>Challenge <span id="npcname"></span>, <span id="npcnickname"></span>? </strong></h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                  You are about to engage in a <strong id="difficulty_color"><span id="difficulty"></span></strong> match for rank <strong><span id="npcrank"></span></strong> and a prize of <strong style="color: #006400">ꞗ-<span id="prize"></span></strong>.
+                                  You have a <strong id="winrate_color"><span id="winrate"></span>&percnt;</strong> chance to win this match.
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Back down</button>
+                                  <button type="button" class="btn btn-secondary fight" id="fightbtn" name="">Fight</button>
+                              </div>
+                          </div>
+                          </div>
+                      </div>
+                      <!-- Modal 2 Win-->
+                      <div class="modal fade" id="challengeWin" aria-hidden="true" aria-labelledby="challengeWinLabel" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="challengeWinLabel"><strong>Fight Result</strong></h5>
+                              </div>
+                              <div class="modal-body container-fluid">
+                                <!-- Image of the fight-->
+                                <div class="container-fluid">
+                                  <div class="row justify-content-md-center">
+                                    <div style="width: 30rem;">
+                                      <div class="card-header bg-transparent text-justify">Sweat drips into your eyes as you duck under a wild hook. Then you explode forward, driving a thunderous right cross into your opponent’s jaw, sending him crashing to the canvas. The referee's count fades into the roaring crowd as you stand breathless, knowing you’ve conquered both him and your own limits.</div>
+                                      <p></p>
+                                      <img src="{% static 'bcmain/FightWin.png' %}" class="card-img" alt="FightWin">
+                                    </div>
+                                    <div class="text-success">
+                                      <p></p>
+                                      <p class="card-text text-center mb-2"><strong> You've Won </strong></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button class="btn btn-outline-dark" type="submit" id="winbtn" name="" data-bs-dismiss="modal"> Ok </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal 3 Lose-->
+                      <div class="modal fade" id="challengeLose" aria-hidden="true" aria-labelledby="challengeLoseLabel" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title text-center" id="challengeLoseLabel"><strong>Fight Result</strong></h5>
+                              </div>
+                              <div class="modal-body">
+                                <div class="container-fluid">
+                                  <!-- Image of the fight-->
+                                  <div class="container-fluid">
+                                    <div class="row justify-content-md-center">
+                                      <div style="width: 30rem;">
+                                        <div class="card-header bg-transparent text-justify">You throw everything you have, but your rival reads you like a book, slipping every punch before landing a brutal uppercut that sends you crashing down. Dazed on the canvas, you hear the count, but deep inside you know; you never stood a chance.</div>
+                                        <p></p>
+                                        <img src="{% static 'bcmain/FightLose.png' %}" class="card-img" alt="FightLose">
+                                      </div>
+                                      <div class="text-danger">
+                                        <p></p>
+                                        <p class="card-text text-center mb-2"><strong> You've Lost </strong></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button class="btn btn-outline-dark" type="submit" id="losebtn" name="" data-bs-dismiss="modal"> Ok </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal 4 Champion-->
+                      <div class="modal fade" id="champion" aria-hidden="true" aria-labelledby="championLabel" tabindex="-1">
+                          <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="championLabel"><strong>Fight Result</strong></h5>
+                              </div>
+                              <div class="modal-body container-fluid">
+                                <!-- Image of the champion-->
+                                <div class="container-fluid">
+                                  <div class="row justify-content-md-center">
+                                    <div style="width: 30rem;">
+                                      <div class="card-header bg-transparent text-justify">The lights blaze down, the crowd’s roar swelling like a storm as you circle the ring, heart pounding in your chest. Every muscle burns, every breath tastes of iron and adrenaline. Then, in a perfect flash of instinct and precision, your fist finds its mark — a crushing uppercut that lifts your opponent off his feet and seals his fate. He hits the canvas, the count echoes, and time seems to stop. When the referee raises your hand, the arena erupts — you’re no longer just a fighter, you’re the world champion. In that instant, the years of struggle, sacrifice, and sweat all crystallize into one truth: you’ve reached the pinnacle of the sport, and your name will forever echo among the greats.</div>
+                                      <p></p>
+                                      <img src="{% static 'bcmain/Champion.jpg' %}" class="card-img" alt="Champion">
+                                    </div>
+                                    <div class="text-success">
+                                      <p></p>
+                                      <p class="card-text text-center mb-2"><strong> Congratulations! You've become World Champion. </strong></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <button class="btn btn-outline-dark" type="submit" id="winbtn" name="" data-bs-dismiss="modal"> Ok </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </tbody>
+                </table>
+            <div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container"> 
+    <div class="d-flex flex-wrap align-items-center justify-content-center">
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <div class="row my-2">
+                <h3> Register as a new user: </h3>
+            </div>
+            <div class="row">
+                <div class="mb-2 col">
+                    <input autofocus type="text" class="form-control mb-3" name="InputUser" placeholder="Username">
+                    <input type="password" class="form-control mb-3" name="InputPassword" placeholder="Password">
+                    <input type="password" class="form-control mb-0" name="ConfirmPassword" placeholder="Confirm your Password">
+                </div>
+                <div class="mb-2 col">
+                    <input type="email" class="form-control mb-3" name="InputEmail" aria-describedby="emailHelp" placeholder="Email (optional)">
+                    <input type="text" class="form-control mb-3" name="InputFirstName" placeholder="First Name (optional)">
+                    <input type="text" class="form-control mb-0" name="InputLastName" placeholder="Last Name (optional)">
+                </div>
+            </div>
+            <!-- Error messages section -->
+            <div class="row">
+                <div class="col">
+                {% if message %}
+                    {% for message in messages %}
+                        <span {% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: #b11226">
+                            {{ message }}
+                        </span>
+                    {% endfor %}
+                {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <span id="emailHelp" class="form-text mb-2">We'll never share your email with anyone.</span>
+                <button type="submit" class="btn btn-secondary">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code file -->
+{% block script %}
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container d-flex flex-wrap align-items-center justify-content-center">
+  <div class="row">
+    <!-- Show timer to recover full energy -->
+    <div class="d-flex align-items-center my-2 border-bottom">
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+      <strong class="mx-3 text-center"><h2> Recovering </h2> Time left <span id="timer"> 0{{ timer }} </span></strong> 
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+      <div class="spinner-grow mx-1" style="width: 1.5rem; height: 1.5rem;" role="status"></div>
+    </div>
+  </div>   
+</div>
+
+<div class="container d-flex flex-wrap align-items-center justify-content-center">
+  <!-- Carousel of dreams -->
+  <div class="card">
+    <div id="carousel_dreams" class="carousel slide mb-3" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <!-- Fixed first image -->
+        {% if mode == 'full' %}
+        <div class="carousel-item active" data-bs-interval="4000">
+          <img src="{% static 'bcmain/Dream1.jpg' %}" class="d-block w-100" alt="Dream1">
+        </div>
+        <!-- Swap to array of images depending on context KO or recover button) | Use images with names stored in passed variable -->
+        {% for image in recovery_carousel %}
+        <div class="carousel-item" data-bs-interval="5000">
+          <img src="{% static 'bcmain/' %}{{ image }}" class="d-block w-100" alt="{{ image }}">
+        </div>
+        {% endfor %}
+      </div>
+        <div class="card-body">
+          <p class="card-text text-justify">
+            As you lie asleep in the quiet sanctuary of your home, vivid images emerge from the depths of your mind. 
+            They summon the radiant glow of your hopes and dreams, weaving visions of triumph and glory. 
+            Yet, interwoven with these are shadows of doubt, the haunting specters of past failures, and the unspoken battles of your inner turmoil. 
+            In this twilight realm of slumber, your heart's deepest desires and fears collide, painting a tapestry of aspiration and vulnerability that only the unconscious mind can reveal.
+          </p>
+        </div>
+        <!-- Fixed first image -->
+        {% elif mode == 'KO' %}
+        <div class="carousel-item active" data-bs-interval="4000">
+          <img src="{% static 'bcmain/KO1.jpg' %}" class="d-block w-100" alt="KO1">
+        </div>
+        <!-- Swap to array of images depending on context KO or recover button) | Use images with names stored in passed variable -->
+        {% for image in recovery_carousel %}
+          <div class="carousel-item" data-bs-interval="5000">
+            <img src="{% static 'bcmain/' %}{{ image }}" class="d-block w-100" alt="{{ image }}">
+          </div>
+        {% endfor %}
+      </div>
+        <div class="card-body">
+          <p class="card-text text-justify">
+            You lie on the narrow hospital bed, breathing in shallow, ragged gulps, each one a reminder of the assault you endured just hours before. 
+            The steady hum of the machines at your bedside is both comforting and cruel, a metronome marking the slow passage of time while your body demands rest. 
+            The right eye is swollen shut, the bridge of your nose tender and bruised, while a thin sheen of sweat beads on your skin despite the cool, sterile air. 
+            Every muscle in your body trembles with a dull ache that pulses through the bones, echoing the final blow that sent you crashing to the canvas.
+          </p><p class="text-justify">
+            As the morphine drip delivers its steady relief, your mind drifts back to the roar of the crowd, the clang of the bell, and the blinding glare of the overhead lights. A nurse adjusts your IV, her soft voice reminding you to stay still, to let your body heal. Somewhere in the corridor, another fighter’s corner shout bleeds through the walls, a reminder that the fight game never sleeps. You close your eyes, determined that this knockout defeat will not define you. Tomorrow, you promise yourself, you will wake stronger, ready to rebuild from the ashes of this hard-fought loss.
+          </p>
+        </div>        
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Page specific JS code -->
+{% block script %}
+<script>
+  // Disable the navigation layout while recovering (except profile column for sign out). Button should change to recovering...
+    // For the layout
+  function disable_nav() {
+      // Select all nav items to disable
+    nav_items = document.querySelectorAll('.to-disable');
+      nav_items.forEach((item) => 
+        item.classList.add("disabled"));
+    // For the button
+    recoverbtn = document.getElementById('recoverbtn');
+    recoverbtn.innerText = "Recovering...";
+    recoverbtn.classList.add("disabled")
+  };
+
+  function refresh_page() {
+    location.href = "{% url 'home' %}"
+
+  };
+
+  // To calculate/show recovering time left
+  function start_countdown(duration) {
+    // Record the start time
+    start = Date.now(); 
+    // Convert duration to milliseconds
+    total = duration * 1000; 
+    // Update timer/countdown
+    function updateTimer() {
+      // Calculate time elapsed since the start
+      elapsedTime = Date.now() - start; 
+       // Calculate remaining time in milliseconds
+      remainingTime = total - elapsedTime;
+      if (remainingTime > 0) {
+        // Recalculate time
+        hours = Math.floor(remainingTime / 1000 / 60 / 60);
+        minutes = Math.floor((remainingTime / 1000 / 60) % 60);
+        seconds = Math.floor((remainingTime / 1000) % 60);
+        // Add leading zeroes and update template
+        document.getElementById("timer").textContent = `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        // Schedule next update
+        requestAnimationFrame(updateTimer); 
+      } 
+      else {
+        // When time's up
+        document.getElementById("timer").textContent = "00:00:00"; 
+        // Reload page
+        setTimeout(refresh_page, 1000)
+      }
+    }
+    // Start the countdown
+    updateTimer(); 
+  }
+    
+  // When page loads
+  window.onload = function () {
+    // Disable navigation bar 
+    disable_nav();
+    // Set timer for full recovery
+    timer = document.getElementById('timer').innerText
+    // Split timer (string) in template to hours, minutes and seconds. Then convert to numbers
+    remaining_time = timer.split(':')
+    hours = Number(remaining_time[0])
+    minutes = Number(remaining_time[1])
+    seconds = Number(remaining_time[2]) 
+    // Calculate duration in seconds
+    duration = hours * 60 * 60 + minutes * 60 + seconds
+    // Start the countdown
+    start_countdown(duration);
+  };
+
+</script>
+{% endblock %}

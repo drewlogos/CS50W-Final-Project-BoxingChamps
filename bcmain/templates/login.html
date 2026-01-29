@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container"> 
+    <div class="d-flex flex-wrap align-items-center justify-content-center ">
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="row my-2">
+                <h3> Log in: </h3>
+            </div>
+            <!-- Error messages section -->
+            <div class="row">
+                {% if message %}
+                    {% for message in messages %}
+                        <span {% if message.tags %} class="{{ message.tags }} mb-3"{% endif %} style="color: #b11226">
+                            {{ message }}
+                        </span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <!-- Form section -->
+            <div class="row">
+                <input autofocus class="form-control mb-3" type="text" name="InputUsername" placeholder="Username">
+                <input class="form-control mb-3" type="password" name="InputPassword" placeholder="Password">
+                <button type="submit" class="btn btn-secondary mb-2">Login</button>
+            </div>
+            
+            <div class="row">
+                <div class="col">
+                    Don't have an account? <a href="register" style="color: gray">Register here </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

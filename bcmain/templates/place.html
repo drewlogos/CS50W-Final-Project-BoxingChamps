@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center"> 
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <!-- Image of the Place -->
+                <img src="/static/bcmain/{{ zone.image }}" class="card-img-top" alt="{{ zone.full_name }}"></img>
+                <div class="card-body">
+                    <div class="row">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-center"><strong class="card-title text-center" id="zonename">{{ zone.full_name }}</strong></li> <!-- This used also as a selector to identify zone in JS and pass to views -->
+                        </ul>
+                    <div class="row mt-2">
+                        <span class="card-title text-justify">{{ zone.description }}</span>
+                    </div>
+                    <div class="row">
+                    <div class="d-grid mx-auto col-auto mb-3">
+                        <a href="{% url 'city' %}" class="navhref btn btn-outline-secondary mb-1">Back to city</a>
+                    </div>
+                    </div>
+                </div>
+                    
+                    <!-- Navigation -->
+                    <div class="row">
+                        <ul class="list-group list-group-flush">
+                            <div class="border-bottom">
+                            </div>
+                            <!-- Area introducion section (shows after clicking area button)-->
+                            <div class="row mx-1">
+                                <div class="card-title my-2 intro-area text-center "> 
+                                    <strong class="card-title intro-area-title"> </strong>
+                                </div>
+                                <span class="card-title mb-3 intro-area-text text-justify"> </span>
+                            </div>
+
+                            <!-- Alerts section -->
+                            <div class="alert alert-success alert-dismissible text-center my-2" role="alert" id="alertgreen">
+                                <span id="alerttextg"></span>
+                                <button type="button" class="btn-close" aria-label="Close" id="alertbtng"></button>
+                            </div>
+                            <div class="alert alert-danger alert-dismissible text-center my-2" role="alert" id="alertred">
+                                <span id="alerttextr"></span>
+                                <button type="button" class="btn-close" aria-label="Close" id="alertbtnr"></button>
+                            </div>
+                        </ul>
+                    </div>
+
+                    <!-- Areas and Actions in Place -->
+                    <div class="row my-2">
+                        <div class="card col-sm-6">
+                            <h5 class="card-title text-center my-1"><strong>Areas</strong></h5>
+                            <ul class="list-group list-group-flush">
+                                <!-- Deploy the list of areas -->
+                                {% for area in ar_act %}
+                                    <!-- Each row of buttons will collapse according to their respective "area" button clicked. Area is defined in data-bs-target. Each button have an action and is selected in JS by class (place_act_btn) -->
+                                    <li class="list-group list-group-item text-center"><button type="button" class="btn btn-outline-secondary list-group-item-action my-1 place_act_btn" data-bs-toggle="collapse" data-bs-target=".{{area.area}}" aria-expanded="false" aria-controls="collapseActions" name="{{ area.area }}">{{ area.area }}</button></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card col-sm-6">
+                            <h5 class="card-title text-center my-1"><strong>Actions</strong></h5>
+                            <ul class="list-group list-group-flush">
+                                <!-- Deploy the list of actions -->
+                                {% for area in ar_act %}
+                                    <!-- Each area has a set of actions (buttons) grouped in each row-->
+                                    <li class="list-group-item text-center collapse {{area.area}}"> <!-- Here it is defined the button row that will appear according to their respective area -->
+                                    {% for action in area.actions %}
+                                    <!-- Action buttons selected in JS by their class (place_act_btn) and subclass (action) which is dynamic (received from views) -->
+                                        <button type="button" class="btn btn-secondary my-1 place_act_btn {{ action }}" name="{{ action }}">{{ action }}</button>
+                                    {% endfor %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- For events (dialog,story,etc). This section appears at bottom -->
+                    <div class="row mx-1">
+                        <div class="card-title event my-2 text-center"> 
+                            <strong class="card-title eventtitle"> </strong>
+                        </div>
+                        <span class="card-title eventtext text-justify"> </span>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

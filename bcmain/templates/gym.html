@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container"> 
+  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-6">
+          <div class="card">
+              <img src="{% static 'bcmain/Gym.png' %}" class="card-img-top" alt="Gym"></img>
+              <div class="card-header text-center">
+                <b><span class="card-title mt-1">Gym</span></b>
+              </div>
+              <div class="card-body">
+                  <p class="card-text"><strong>Current Gym:</strong> {{ player.gym_name }} </p>
+                  <p><strong>Gym level:</strong><span id="gymlevel"> {{ player.gym_level }} </span></p>
+                  <p>You can spend energy at the Gym to increase your strength, stamina and other stats. Depending on the Gym level there will be the different stats available to train. The higher the Gym level, the more stats available. This will improve your fighting skills and get you a better chance to move up in the ranks. </p>
+                  <p>By getting a reputation in this world of boxing, you earn not only respect but also the opportunity to inspire others. A strong reputation reflects your dedication, discipline, and resilience, making you a role model for aspiring fighters. </p>
+                  <p>However, it also comes with expectations and challenges, as every fight becomes a test to maintain your status. True greatness in boxing is measured not just by titles but by how you carry yourself in and out of the ring.</p>
+              </div>
+          </div>
+      </div>
+      <!-- Right Column -->
+      <div class="col-6">
+        <div class="card">
+          <img src="{% static 'bcmain/Gym2.png' %}" class="card-img-top" alt="Gym2"></img>
+          <div class="card-header text-center">
+              <b class="card-title mt-1">Training</b>
+          </div>
+          <div class="card-body">
+            <div class="row ms-2">
+              <div class="row mb-3">
+                <span class="text-center"> Here you can spend energy to increase your stats. <p> You currently have <strong style="color: #B8860B" id="penergy"> {{ user.energy }}</strong> energy available.</p></span>
+                {% if not player.joined_gym %}
+                <div class="row ms-2 alert alert-warning alert-dismissible my-2 text-center" role="alert" id="alertyellow1">Your training will be limited until you join a Gym. Gyms have levels which have allows for different stats to train. Explore the city and join better Gyms to unlock more stats training, instead of the default ones.
+                  <button type="button" class="btn-close" aria-label="Close" id="alertbtny1"></button>
+                </div> 
+                {% endif %}  
+              </div>
+              
+                <!-- Alert section | Show training result (success or fail) and the type/amount of stat increase -->
+                  <!-- Green Alert | Success -->
+                <div class="row text-center mb-3">
+                  <div class="alert alert-success alert-dismissible text-center my-2" role="alert" id="alertgreen">
+                    <span id="alerttextg"></span>
+                    <button type="button" class="btn-close" aria-label="Close" id="alertbtng"></button>
+                  </div>
+                  <!-- Red Alert | Fail -->
+                  <div class="alert alert-danger alert-dismissible text-center my-2" role="alert" id="alertred">
+                    <span id="alerttextr"></span>
+                    <button type="button" class="btn-close" aria-label="Close" id="alertbtnr"></button>
+                  </div>
+                  <!-- Yellow Alert 2 | Warning -->
+                  <div class="alert alert-warning alert-dismissible text-center my-2" role="alert" id="alertyellow2">
+                    <span id="alerttexty2"></span>
+                    <button type="button" class="btn-close" aria-label="Close" id="alertbtny2"></button>
+                  </div>
+                </div>
+            
+                <!-- Stats training section -->
+                <div class="row mb-3 border-bottom"> 
+                  <div class="col-6 text-center"><strong> Your Stats </strong></div>
+                  <div class="col-6"><strong> Energy Distribution (&percnt;)</strong></div>
+                </div>
+
+                <div class="row">
+                  <label for="inputstr" class="col-sm-6 col-form-label">
+                    <strong>Strength:</strong> <span id="pstr"> {{ player.formatted_stats.str }} </span> <!-- span.id used to update the .innerText in JS once training is done -->
+                  </label>  
+                  <div class="col-3">
+                    <input type="number" class="form-control" name="inputstr" id="inputstr" placeholder="0" min="0" max="{{ user.energy }}" step="5"> </input> 
+                  </div>
+                  <div class="row mb-3">
+                    <span id="strenghtHelp" class="form-text">Measures the raw power of punches and knockout capability</span>
+                  </div>
+                </div>
+
+                <div class="row"> 
+                  <label for="inputdex" class="col-sm-6 col-form-label">
+                    <strong>Dexterity:</strong> <span id="pdex"> {{ player.formatted_stats.dex }} </span>
+                  </label>
+                  <div class="col-3">
+                    <!-- Add an "IF" condition inside the element to add the "readonly" attribute for disabling the input (according to gym level) -->
+                    <input type="number" class="form-control" name="inputdex" id="inputdex" placeholder="0" min="0" max="{{ user.energy }}" step="5" {% if player.gym_level < 2 %}readonly style="background-color: #D3D3D3;" {% endif %}> </input>
+                  </div>
+                  <div class="row mb-3">
+                    <span id="dexterityHelp" class="form-text">Indicates agility and finesse in movement and technique</span>
+                  </div>
+                </div>
+
+                <div class="row"> 
+                  <label for="inputspd" class="col-sm-6 col-form-label">
+                    <strong>Speed:</strong> <span id="pspd"> {{ player.formatted_stats.spd }} </span>
+                  </label>
+                  <div class="col-3">
+                    <!-- Add an "IF" condition inside the element to add the "readonly" attribute for disabling the input (according to gym level) -->
+                    <input type="number" class="form-control" name="inputspd" id="inputspd" placeholder="0" min="0" max="{{ user.energy }}" step="5" {% if player.gym_level < 2 %}readonly style="background-color: #D3D3D3;" {% endif %}> </input>
+                  </div>
+                  <div class="row mb-3">
+                    <span id="speedHelp" class="form-text">Reflects how quickly you can throw punches and evade attacks</span>
+                  </div>
+                </div>
+
+                <div class="row"> 
+                  <label for="inputsta" class="col-sm-6 col-form-label">
+                    <strong>Stamina:</strong> <span id="psta"> {{ player.formatted_stats.sta }} </span>
+                  </label>
+                  <div class="col-3">
+                    <input type="number" class="form-control" name="inputsta" id="inputsta" placeholder="0" min="0" max="{{ user.energy }}" step="5"> </input>
+                  </div>
+                  <div class="row mb-3">
+                    <span id="staminaHelp" class="form-text">Assesses endurance for maintaining performance throughout a fight</span>
+                  </div>
+                </div>
+
+                <div class="row"> 
+                  <label for="inputacc" class="col-sm-6 col-form-label">
+                    <strong>Accuracy:</strong> <span id="pacc"> {{ player.formatted_stats.acc }} </span>
+                  </label>
+                  <div class="col-3">
+                    <!-- Add an "IF" condition inside the element to add the "readonly" attribute for disabling the input (according to gym level) -->
+                    <input type="number" class="form-control" name="inputacc" id="inputacc" placeholder="0" min="0" max="{{ user.energy }}" step="5" {% if player.gym_level < 3 %}readonly style="background-color: #D3D3D3;"{% endif %}> </input>
+                  </div>
+                  <div class="row mb-3">
+                    <span id="accuracyHelp" class="form-text">Represents the precision of strikes and ability to land punches</span>
+                  </div>
+                </div>
+
+                <div class="row mb-2"> 
+                  <label for="inputdefn" class="col-sm-6 col-form-label">
+                    <strong>Defense:</strong> <span id="pdefn"> {{ player.formatted_stats.defn }} </span>
+                  </label>
+                  <div class="col-3">
+                    <input type="number" class="form-control" name="inputdefn" id="inputdefn" placeholder="0" min="0" max="{{ user.energy }}" step="5"> </input>
+                  </div>
+                  <div class="row mb-3">
+                    <span id="defenseHelp" class="form-text">Evaluates the ability to absorb or block hits, reducing damage taken</span>
+                  </div>
+                </div>
+
+                <div class="row mb-2">
+                  <button class="btn btn-outline-dark" type="submit" id="gymtrain" name="gymtrain"> Begin Training </button> <!-- The id is the identifier for JS code part-->
+                </div>   
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

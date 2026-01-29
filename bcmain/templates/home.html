@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+<div class="container"> 
+  <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-6">
+        <div class="card">
+          <img src="{% static 'bcmain/Home1.png' %}" class="card-img-top" alt="Home"></img>
+          <div class="card-header">
+            <h5 class="card-title mt-1 text-center">Home</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text">Rising up the ranks in Glovegate City is a journey filled with dedication, strategy, and skill. Here's a guide on how you might advance from an unknown fighter to a top contender in this vibrant boxing metropolis:</p>
+            <p>
+              <ol class="my-1">
+              <strong><li>Start Training</li></strong>
+                <p class="nav-link my-1">-Join a Local Gym: Explore the City and sign up at one of the many reputable gyms. These gyms offer essential training programs for beginners, including conditioning, technique, and sparring sessions. Each gym has its perks allowing you to train different abilities.</p>
+                <p class="nav-link my-1">-Train Relentlessly: Focus on perfecting your technique, improving your physical conditioning, and developing a unique fighting style that sets you apart from the rest of the beginners.</p>
+              <p></p>
+                <strong><li>Build Your Reputation and Get Noticed</li></strong>
+                <p class="nav-link my-1">-Challenge Top Contenders: Seek opportunities to fight established champions and top-ranked fighters in the Titan Arena. Winning against high-profile opponents will significantly boost your status.</p>
+                <p class="nav-link my-1">-Maintain Peak Performance: Continue training rigorously and adapting your techniques. Staying at the top requires constant improvement and resilience.</p>
+              <p></p>
+                <strong><li>Stay in the Spotlight</li></strong>
+                <p class="nav-link my-1">-Target Major Titles: Set your sights on winning the Championship belt. Achieving this will solidify your place among the elite fighters in Glovegate and beyond.</p>
+              </ol>
+            </p>
+            <p>By following these steps, you can carve out a successful path from a novice to a top contender in the electrifying world of Glovegate City's boxing scene.</p>        
+          </div>
+        </div>
+      </div>
+      <!-- Right Column -->
+      <div class="col-6">
+        <div class="card">
+          <img src="{% static 'bcmain/Home2-Player.png' %}" class="card-img-top" alt="Character"></img>
+            <div class="card-header">
+                <h5 class="card-title mt-1 text-center">Character</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <p class="card-text mb-2"><strong>Rank:</strong> 
+                  {% if player.rank_hof > 10 %}
+                  None
+                  {% else %}
+                  {{ player.rank_hof }}
+                  {% endif %}
+                </p>
+              </div>
+              <div class="row">
+                <p class="card-text mb-2"><strong>Reputation:</strong> {{ player.reputation }}</p>
+              </div>
+              <!-- Stats -->
+              <div class="row ms-2">
+                <p> <strong>Strength:</strong> {{ player.formatted_stats.str }} </p>
+                <p> <strong>Dexterity:</strong> {{ player.formatted_stats.dex }} </p>
+                <p> <strong>Speed:</strong> {{ player.formatted_stats.spd }} </p>
+                <p> <strong>Stamina:</strong> {{ player.formatted_stats.sta }} </p>
+                <p> <strong>Accuracy:</strong> {{ player.formatted_stats.acc }} </p>
+                <p> <strong>Defense:</strong> {{ player.formatted_stats.defn }} </p>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}

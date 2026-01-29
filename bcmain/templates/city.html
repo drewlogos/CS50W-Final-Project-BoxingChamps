@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% load static %}
+
+<!-- Page specific code -->
+{% block body %}
+    <div class="container d-flex flex-wrap align-items-center justify-content-center justify-content-lg-center"> 
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <!-- Image of the Place -->
+                    <img src="{% static 'bcmain/GlovegateCity.png' %}" class="card-img-top mb-2" alt="Glovegate City"></img>
+                    <div class="card-body">
+                        <div class="row mb-2">
+                            <span class="card-title">The city has an electric energy, pulsing with the excitement of constant matches and training sessions. The streets are lined with sports bars, boxing gyms, and memorabilia shops celebrating the sport's rich history. The air is often filled with the sounds of cheering crowds and the rhythmic thud of heavy bags being pounded.</span>
+                        </div>
+                    </div>
+                </div>
+                
+                    <!-- Navigation -->
+                    <div class="row">
+                        <strong class="text-center my-2">Zones and Places</strong>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="row">
+                            <!-- Slice the places evenly to fill the list (depending on the amount of rows, change size) -->
+                            {% with places|slice:":2" as first_half %}
+                            {% with places|slice:"2:" as second_half %}
+                            <div class="card col-sm-6">
+                                <ul class="list-group list-group-flush">
+                                    <!-- Left column -->
+                                    {% for place in first_half %}
+                                        <a href="city/{{ place.id_name }}" class="navhref list-group-item list-group-item-action text-center">{{ place.full_name }}</a>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="card col-sm-6">
+                                <ul class="list-group list-group-flush">
+                                    <!-- Right column -->
+                                    {% for place in second_half %}
+                                        <a href="city/{{ place.id_name }}" class="navhref list-group-item list-group-item-action text-center">{{ place.full_name }}</a>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endwith %}
+                            {% endwith %} 
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+
+{% endblock %}
+
+<!-- For my JS code -->
+{% block script %}
+{% endblock %}
