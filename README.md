@@ -2,6 +2,8 @@
 
 ### Video Showcase:  <https://www.youtube.com/watch?v=mkNfzAn0VDw>
 
+## Description
+
 Boxing Champs is a narrative-driven, text-based role-playing game inspired by web browser titles like Torn and boxing games like Punch Club. Set in a fictional place named Glovegate City, the game invites players to carve out their legacy in a world where ambition, discipline, and consistency define success. With dedication, effort and skill training the game will advance you from an unknown fighter to a top contender in a vibrant boxing metropolis.
 
 This is the final project developed for the course "CS50W: Web Programming with Python and JavaScript" from Harvard Online Courses. It is the result of months of curiosity, experimentation, and problem-solving that grew beyond its initial idea. I wanted to see how far I could push Django, a framework usually used for content-driven websites, into behaving like a living, responsive game. The result is this browser-based boxing RPG that merges backend logic with dynamic front-end interactivity. It’s a project I’m genuinely proud of because it challenged me to connect everything I had learned about databases, server communication, and user experience into one cohesive system that works in real time.
